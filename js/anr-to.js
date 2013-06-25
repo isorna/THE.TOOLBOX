@@ -1,7 +1,7 @@
 /*jslint indent: 4 */
 /*global document, window, $, console, Backbone */
 
-var gfGetURL, goANRTO;
+var ANRTO = new Object();
 
 // START encapsulation
 (function () {
@@ -14,7 +14,7 @@ var gfGetURL, goANRTO;
      * cache: (pcDataType == 'script') ? true : false
      * @todo: decide if we send some log message in case of an error
      */
-    gfGetURL = function (pcURL, pbAsync, pfCallback, pcDataType) {
+    ANRTO._getURL = function (pcURL, pbAsync, pfCallback, pcDataType) {
         var rData = 'Failed to load URL: ' + pcURL;
         pcDataType = pcDataType || 'text';
     
@@ -33,20 +33,70 @@ var gfGetURL, goANRTO;
     
         return rData;
     };
-    
+	
     /*
-     * APP object declaration
+     * ANRTO cache
      */
-    goANRTO = {
-        initialize: function () {}
-    };
+    ANRTO.cache = {};
+	
+    /*
+     * ANRTO initialize method
+     */
+    ANRTO._initialize = function () {
+		// Views
+		ANRTO.cache.views = {
+			home: new (Backbone.View.extend({
+				id: 'homeWrapper',
+				template: $('#homeTemplate').html(),
+				initialize: function () {},
+				render: function () {
+					var hVars = {
+						cHeaderTitle: 'ANR: TO'
+					};
+					
+					this.$el.html(_.template(this.template, hVars)).appendTo('body');
+					
+					return this;
+				}
+			}))
+		};
+		
+        // INIT ROUTER
+		ANRTO.cache.router = new (Backbone.Router.extend({
+			routes: {
+				'ANR-TO/': 'home',
+				'ANR-TO/*path': '404'
+			},
+			home: function () {
+				console.log('home');
+				ANRTO.cache.views.home.render();
+			},
+			404: function (pcPath) {
+				console.log('[404]', pcPath);
+			}
+		}));
+
+        // History
+        Backbone.history.start({pushState: true, hashChange: true});
+
+        // CAPTURE pushState
+        $(document).on("click", "a[href^='/']", function (poEvent) {
+			var cUrl = '';
+			
+            if (!poEvent.altKey && !poEvent.ctrlKey && !poEvent.metaKey && !poEvent.shiftKey) {
+                poEvent.preventDefault();
+                cUrl = $(poEvent.currentTarget).attr("href").replace(/^\//, "");
+                ANRTO.cache.router.navigate(cUrl, {trigger: true});
+            }
+        });
+	};
     
     /*
      * START document.ready()
      */
     $(document).ready(function () {
         // APP initialization
-        goANRTO.initialize();
+        ANRTO._initialize();
     });
     // END encapsulation
 }());
