@@ -47,14 +47,21 @@ var ANRTO = new Object();
 		ANRTO.cache.views = {
 			home: new (Backbone.View.extend({
 				id: 'homeWrapper',
+				className: 'pageWrapper',
 				template: $('#homeTemplate').html(),
+				viewRendered: false,
 				initialize: function () {},
 				render: function () {
 					var hVars = {
 						cHeaderTitle: 'ANR: TO'
 					};
 					
-					this.$el.html(_.template(this.template, hVars)).appendTo('body');
+					if (!this.viewRendered) {
+						this.$el.html(_.template(this.template, hVars)).appendTo('body');
+					} else {
+						$('.pageWrapper').hide();
+						this.$el.show();
+					}
 					
 					return this;
 				}
@@ -68,7 +75,6 @@ var ANRTO = new Object();
 				'ANR-TO/*path': '404'
 			},
 			home: function () {
-				console.log('home');
 				ANRTO.cache.views.home.render();
 			},
 			404: function (pcPath) {
