@@ -9,38 +9,41 @@
      * APP object declaration
      */
     poGlobals.goANRTO = {
-        cache: {},
+        cache: {
+            views: {},
+            database: {},
+            request: {}
+        },
         initialize: function () {
-            // Views
-            
-            poGlobals.goANRTO.cache.views = {
-                home: new (Backbone.View.extend({
-                    id: 'homeWrapper',
-                    className: 'pageWrapper',
-                    template: $('#homeTemplate').html(),
-                    viewRendered: false,
-                    initialize: function () {},
-                    render: function () {
-                        var hVars = {
-                            cHeaderTitle: 'ANR: TO'
-                        };
-                        
-                        if (!this.viewRendered) {
-                            this.$el.html(_.template(this.template, hVars)).appendTo('body');
-                        } else {
-                            $('.pageWrapper').hide();
-                            this.$el.show();
-                        }
-                        
-                        return this;
+            // VIEWS            
+            poGlobals.goANRTO.cache.views.home = new (Backbone.View.extend({
+                id: 'homeWrapper',
+                className: 'pageWrapper',
+                template: $('#homeTemplate').html(),
+                viewRendered: false,
+                initialize: function () {},
+                render: function () {
+                    var hVars = {
+                        cHeaderTitle: 'ANR: TO'
+                    };
+                    
+                    if (!this.viewRendered) {
+                        this.$el.html(_.template(this.template, hVars)).appendTo('body');
+                    } else {
+                        $('.pageWrapper').hide();
+                        this.$el.show();
                     }
-                }))
-            };
+                    
+                    return this;
+                }
+            }));
             
-            // INIT ROUTER
+            // ROUTER            
             poGlobals.goANRTO.cache.router = new (Backbone.Router.extend({
                 routes: {
+                    'C:/xampp/htdocs/ANR-TO/index.html': 'home',
                     'ANR-TO/': 'home',
+                    'ANR-TO/index.html': 'home',
                     'ANR-TO/*path': '404'
                 },
                 home: function () {
@@ -51,7 +54,7 @@
                 }
             }));
     
-            // History
+            // HISTORY
             Backbone.history.start({pushState: true, hashChange: true});
     
             // CAPTURE pushState
@@ -64,6 +67,28 @@
                     poGlobals.goANRTO.cache.router.navigate(cUrl, {trigger: true});
                 }
             });
+            
+            // IndexedDB
+            // @read: http://stackoverflow.com/questions/9384128/how-to-delete-indexeddb-in-chrome
+            // @read: https://developer.mozilla.org/en/docs/IndexedDB
+            // poGlobals.indexedDB.deleteDatabase('ANRTO')
+            poGlobals.goANRTO._indexedDBSupport();
+            
+            if (poGlobals.indexedDB) {
+                poGlobals.goANRTO.cache.request = poGlobals.indexedDB.open('ANRTO', 1);
+                poGlobals.goANRTO.cache.request.onerror = function (poEvent) {
+                    console.error('[ERROR]', poEvent.target.errorCode);
+                };
+                poGlobals.goANRTO.cache.request.onsuccess = function (poEvent) {
+                    poGlobals.goANRTO.cache.database = poGlobals.goANRTO.cache.request.result;
+                };
+                poGlobals.goANRTO.cache.request.onupgradeneeded = function (poEvent) {
+                    var oDB = poEvent.target.result, 
+                        oObjectStorePlayers = oDB.createObjectStore('players', {keyPath: 'id', autoIncrement: true}),
+                        oObjectStoreTournaments = oDB.createObjectStore('tournaments', {keyPath: 'id', autoIncrement: true}),
+                        oObjectStoreMatches = oDB.createObjectStore('matches', {keyPath: 'id', autoIncrement: true});
+                };
+            }
         }
     };
 
@@ -99,14 +124,14 @@
      * @read: http://www.sitepoint.com/creating-a-notepad-app-with-indexeddb/
      */
     poGlobals.goANRTO._indexedDBSupport = function () {
-        window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-        window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-        window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+        poGlobals.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+        poGlobals.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+        poGlobals.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
         
-        if (!window.indexedDB) {
+        if (!poGlobals.indexedDB) {
             console.error('[ERROR] No IndexedDB support');
         } else {
-            console.info('IndexedDB support detected');
+            console.info('[OK] IndexedDB support detected');
         }
     };
     
