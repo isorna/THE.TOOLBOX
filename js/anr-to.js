@@ -1,11 +1,72 @@
-/*jslint indent: 4 */
-/*global document, window, $, console, Backbone */
-
-var ANRTO = new Object();
+/*jslint indent: 4, nomen: true */
+/*global document, window, $, _, console, Backbone */
 
 // START encapsulation
-(function () {
+(function (poGlobals) {
     'use strict';
+    
+    /*
+     * APP object declaration
+     */
+    poGlobals.goANRTO = {
+        cache: {},
+        initialize: function () {
+            // Views
+            /*
+            poGlobals.goANRTO.cache.views = {
+                home: new (Backbone.View.extend({
+                    id: 'homeWrapper',
+                    className: 'pageWrapper',
+                    template: $('#homeTemplate').html(),
+                    viewRendered: false,
+                    initialize: function () {},
+                    render: function () {
+                        var hVars = {
+                            cHeaderTitle: 'ANR: TO'
+                        };
+                        
+                        if (!this.viewRendered) {
+                            this.$el.html(_.template(this.template, hVars)).appendTo('body');
+                        } else {
+                            $('.pageWrapper').hide();
+                            this.$el.show();
+                        }
+                        
+                        return this;
+                    }
+                }))
+            };*/
+            
+            // INIT ROUTER
+            /*
+            poGlobals.goANRTO.cache.router = new (Backbone.Router.extend({
+                routes: {
+                    'ANR-TO/': 'home',
+                    'ANR-TO/ *path': '404'
+                },
+                home: function () {
+                    poGlobals.goANRTO.cache.views.home.render();
+                },
+                404: function (pcPath) {
+                    console.log('[404]', pcPath);
+                }
+            }));*/
+    
+            // History
+            Backbone.history.start({pushState: true, hashChange: true});
+    
+            // CAPTURE pushState
+            $(document).on("click", "a[href^='/']", function (poEvent) {
+                var cUrl = '';
+                
+                if (!poEvent.altKey && !poEvent.ctrlKey && !poEvent.metaKey && !poEvent.shiftKey) {
+                    poEvent.preventDefault();
+                    cUrl = $(poEvent.currentTarget).attr("href").replace(/^\//, "");
+                    poGlobals.goANRTO.cache.router.navigate(cUrl, {trigger: true});
+                }
+            });
+        }
+    };
 
     /* 
      * Get file by ajax method
@@ -14,8 +75,8 @@ var ANRTO = new Object();
      * cache: (pcDataType == 'script') ? true : false
      * @todo: decide if we send some log message in case of an error
      */
-    ANRTO._getURL = function (pcURL, pbAsync, pfCallback, pcDataType) {
-        var rData = 'Failed to load URL: ' + pcURL;
+    poGlobals.goANRTO._GetURL = function (pcURL, pbAsync, pfCallback, pcDataType) {
+        poGlobals.goANRTO.rData = 'Failed to load URL: ' + pcURL;
         pcDataType = pcDataType || 'text';
     
         $.ajax({
@@ -24,85 +85,38 @@ var ANRTO = new Object();
             dataType: pcDataType,
             cache: true,
             success: pfCallback || function (poResponse) {
-                rData = poResponse;
+                poGlobals.goANRTO.rData = poResponse;
             },
             error: function (poResponse) {
-                console.error('[ERROR] ' + rData, poResponse);
+                console.error('[ERROR] ' + poGlobals.goANRTO.rData, poResponse);
             }
         });
     
-        return rData;
+        return poGlobals.goANRTO.rData;
     };
 	
     /*
-     * ANRTO cache
+     * indexedDB support
+     * @read: http://www.sitepoint.com/creating-a-notepad-app-with-indexeddb/
      */
-    ANRTO.cache = {};
-	
-    /*
-     * ANRTO initialize method
-     */
-    ANRTO._initialize = function () {
-		// Views
-		ANRTO.cache.views = {
-			home: new (Backbone.View.extend({
-				id: 'homeWrapper',
-				className: 'pageWrapper',
-				template: $('#homeTemplate').html(),
-				viewRendered: false,
-				initialize: function () {},
-				render: function () {
-					var hVars = {
-						cHeaderTitle: 'ANR: TO'
-					};
-					
-					if (!this.viewRendered) {
-						this.$el.html(_.template(this.template, hVars)).appendTo('body');
-					} else {
-						$('.pageWrapper').hide();
-						this.$el.show();
-					}
-					
-					return this;
-				}
-			}))
-		};
-		
-        // INIT ROUTER
-		ANRTO.cache.router = new (Backbone.Router.extend({
-			routes: {
-				'ANR-TO/': 'home',
-				'ANR-TO/*path': '404'
-			},
-			home: function () {
-				ANRTO.cache.views.home.render();
-			},
-			404: function (pcPath) {
-				console.log('[404]', pcPath);
-			}
-		}));
-
-        // History
-        Backbone.history.start({pushState: true, hashChange: true});
-
-        // CAPTURE pushState
-        $(document).on("click", "a[href^='/']", function (poEvent) {
-			var cUrl = '';
-			
-            if (!poEvent.altKey && !poEvent.ctrlKey && !poEvent.metaKey && !poEvent.shiftKey) {
-                poEvent.preventDefault();
-                cUrl = $(poEvent.currentTarget).attr("href").replace(/^\//, "");
-                ANRTO.cache.router.navigate(cUrl, {trigger: true});
-            }
-        });
-	};
+    poGlobals.goANRTO._indexedDBSupport = function () {
+        window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+        window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+        window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+        
+        if (!window.indexedDB) {
+            console.error('[ERROR] No IndexedDB support');
+        } else {
+            console.info('IndexedDB support detected');
+        }
+    };
     
     /*
      * START document.ready()
      */
     $(document).ready(function () {
         // APP initialization
-        ANRTO._initialize();
+        poGlobals.goANRTO.initialize();
     });
     // END encapsulation
-}());
+}(this));
