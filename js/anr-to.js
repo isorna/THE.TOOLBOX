@@ -12,7 +12,7 @@
         cache: {},
         initialize: function () {
             // Views
-            /*
+            
             poGlobals.goANRTO.cache.views = {
                 home: new (Backbone.View.extend({
                     id: 'homeWrapper',
@@ -35,14 +35,13 @@
                         return this;
                     }
                 }))
-            };*/
+            };
             
             // INIT ROUTER
-            /*
             poGlobals.goANRTO.cache.router = new (Backbone.Router.extend({
                 routes: {
                     'ANR-TO/': 'home',
-                    'ANR-TO/ *path': '404'
+                    'ANR-TO/*path': '404'
                 },
                 home: function () {
                     poGlobals.goANRTO.cache.views.home.render();
@@ -50,7 +49,7 @@
                 404: function (pcPath) {
                     console.log('[404]', pcPath);
                 }
-            }));*/
+            }));
     
             // History
             Backbone.history.start({pushState: true, hashChange: true});
