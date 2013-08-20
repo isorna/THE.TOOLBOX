@@ -12,7 +12,17 @@
         cache: {
             views: {},
             database: {},
-            request: {}
+            request: {},
+            schema: {
+                player: {
+                    name: '',
+                    points: 0,
+                    runnerWins: 0,
+                    runnerAgendaPoints: 0,
+                    corpWins: 0,
+                    corpAgendaPoints: 0
+                }
+            }
         },
         initialize: function () {
             // VIEWS            
@@ -27,10 +37,70 @@
                         cHeaderTitle: 'ANR: TO'
                     };
                     
+                    $('.pageWrapper').hide();
                     if (!this.viewRendered) {
                         this.$el.html(_.template(this.template, hVars)).appendTo('body');
                     } else {
-                        $('.pageWrapper').hide();
+                        this.$el.show();
+                    }
+                    
+                    return this;
+                }
+            }));
+            poGlobals.goANRTO.cache.views.newPlayer = new (Backbone.View.extend({
+                id: 'newPlayerWrapper',
+                className: 'pageWrapper',
+                template: $('#newPlayerTemplate').html(),
+                viewRendered: false,
+                events: {
+                    'submit #newPlayerForm': 'saveNewPlayer'
+                },
+                initialize: function () {},
+                render: function () {
+                    var hVars = {
+                        cHeaderTitle: 'ANR: TO'
+                    };
+                    
+                    $('.pageWrapper').hide();
+                    if (!this.viewRendered) {
+                        this.$el.html(_.template(this.template, hVars)).appendTo('body');
+                    } else {
+                        this.$el.show();
+                    }
+                    
+                    return this;
+                },
+                saveNewPlayer: function (poEvent) {
+                    var hNewPLayer = {name: $('#newPlayerName').val(), points: 0, runnerWins: 0, runnerAgendaPoints: 0, corpWins: 0, corpAgendaPoints: 0},
+                        oTransaction = poGlobals.goANRTO.cache.database.transaction(['players'], 'readwrite'),
+                        oObjectStore = oTransaction.objectStore('players'),
+                        oRequest = oObjectStore.put(hNewPLayer);
+                    
+                    oRequest.onsuccess = function (poEvent) {
+                        console.log('[OK]', hNewPLayer.name + ' saved!');
+                        // @todo: show player sheet after saving it
+                        poGlobals.goANRTO.cache.router.navigate('players', {trigger: true});
+                    };
+                    
+                    poEvent.preventDefault();
+                }
+            }));
+            poGlobals.goANRTO.cache.views.players = new (Backbone.View.extend({
+                id: 'playersWrapper',
+                className: 'pageWrapper',
+                template: $('#playersTemplate').html(),
+                viewRendered: false,
+                initialize: function () {},
+                render: function (paPlayers) {
+                    var hVars = {
+                        cHeaderTitle: 'ANR: TO',
+                        aPlayers: paPlayers
+                    };
+                    
+                    $('.pageWrapper').hide();
+                    if (!this.viewRendered) {
+                        this.$el.html(_.template(this.template, hVars)).appendTo('body');
+                    } else {
                         this.$el.show();
                     }
                     
@@ -41,13 +111,36 @@
             // ROUTER            
             poGlobals.goANRTO.cache.router = new (Backbone.Router.extend({
                 routes: {
-                    'C:/xampp/htdocs/ANR-TO/index.html': 'home',
-                    'ANR-TO/': 'home',
-                    'ANR-TO/index.html': 'home',
-                    'ANR-TO/*path': '404'
+                    'C:/xampp/htdocs/ANR-TO/index.html': 'home', // LOCAL ENV PATCH
+                    '': 'home',
+                    '/': 'home',
+                    'index.html': 'home',
+                    'players(/:player)': 'players',
+                    'new-player': 'newplayer',
+                    '*path': '404'
                 },
                 home: function () {
                     poGlobals.goANRTO.cache.views.home.render();
+                },
+                players: function (pcPlayer) {
+                    console.log('goANRTO.cache.database');
+                    /*
+                    var oObjectStore = poGlobals.goANRTO.cache.database.transaction('players').objectStore('players');
+                    oObjectStore.openCursor().onsuccess = function (poEvent) {
+                        var oCursor = poEvent.target.result;
+                        
+                        if (oCursor) {
+                            console.log(oCursor.key, oCursor.value);
+                            oCursor.continue();
+                        }
+                    };
+                    
+                    console.log('[PLAYERS]', pcPlayer);*/
+                                        
+                    //poGlobals.goANRTO.cache.views.players.render([]);
+                },
+                newplayer: function () {
+                    poGlobals.goANRTO.cache.views.newPlayer.render();
                 },
                 404: function (pcPath) {
                     console.log('[404]', pcPath);
@@ -80,10 +173,13 @@
                     console.error('[ERROR]', poEvent.target.errorCode);
                 };
                 poGlobals.goANRTO.cache.request.onsuccess = function (poEvent) {
-                    poGlobals.goANRTO.cache.database = poGlobals.goANRTO.cache.request.result;
+                    // @todo: why does it make a new cache.request each time the app is routed?
+                    console.log('PASA', goANRTO.cache.request.result);
+                    goANRTO.cache.database = goANRTO.cache.request.result;
+                    console.log('PASA 2', goANRTO.cache.database);
                 };
                 poGlobals.goANRTO.cache.request.onupgradeneeded = function (poEvent) {
-                    var oDB = poEvent.target.result, 
+                    var oDB = poEvent.target.result,
                         oObjectStorePlayers = oDB.createObjectStore('players', {keyPath: 'id', autoIncrement: true}),
                         oObjectStoreTournaments = oDB.createObjectStore('tournaments', {keyPath: 'id', autoIncrement: true}),
                         oObjectStoreMatches = oDB.createObjectStore('matches', {keyPath: 'id', autoIncrement: true});
