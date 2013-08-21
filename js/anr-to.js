@@ -10,6 +10,9 @@
      */
     poGlobals.goANRTO = {
         cache: {
+            constants: {
+                PAGE_TITLE: '&lt;ANR.TO /&gt;'
+            },
             views: {},
             database: {},
             request: {},
@@ -34,12 +37,13 @@
                 initialize: function () {},
                 render: function () {
                     var hVars = {
-                        cHeaderTitle: 'ANR: TO'
+                        cHeaderTitle: poGlobals.goANRTO.cache.constants.PAGE_TITLE
                     };
                     
                     $('.pageWrapper').hide();
                     if (!this.viewRendered) {
                         this.$el.html(_.template(this.template, hVars)).appendTo('body');
+                        this.viewRendered = true;
                     } else {
                         this.$el.show();
                     }
@@ -58,12 +62,13 @@
                 initialize: function () {},
                 render: function () {
                     var hVars = {
-                        cHeaderTitle: 'ANR: TO'
+                        cHeaderTitle: poGlobals.goANRTO.cache.constants.PAGE_TITLE
                     };
                     
                     $('.pageWrapper').hide();
                     if (!this.viewRendered) {
                         this.$el.html(_.template(this.template, hVars)).appendTo('body');
+                        this.$el.show();
                     } else {
                         this.$el.show();
                     }
@@ -93,13 +98,14 @@
                 initialize: function () {},
                 render: function (paPlayers) {
                     var hVars = {
-                        cHeaderTitle: 'ANR: TO',
+                        cHeaderTitle: poGlobals.goANRTO.cache.constants.PAGE_TITLE,
                         aPlayers: paPlayers
                     };
                     
                     $('.pageWrapper').hide();
                     if (!this.viewRendered) {
                         this.$el.html(_.template(this.template, hVars)).appendTo('body');
+                        this.$el.show();
                     } else {
                         this.$el.show();
                     }
@@ -115,29 +121,33 @@
                     '': 'home',
                     '/': 'home',
                     'index.html': 'home',
+                    '/index.html': 'home',
                     'players(/:player)': 'players',
+                    '/players(/:player)': 'players',
                     'new-player': 'newplayer',
+                    '/new-player': 'newplayer',
                     '*path': '404'
                 },
                 home: function () {
                     poGlobals.goANRTO.cache.views.home.render();
                 },
                 players: function (pcPlayer) {
-                    console.log('goANRTO.cache.database');
-                    /*
-                    var oObjectStore = poGlobals.goANRTO.cache.database.transaction('players').objectStore('players');
+                    var oObjectStore = poGlobals.goANRTO.cache.database.transaction('players').objectStore('players'),
+                        aPlayers = [];
                     oObjectStore.openCursor().onsuccess = function (poEvent) {
                         var oCursor = poEvent.target.result;
                         
                         if (oCursor) {
-                            console.log(oCursor.key, oCursor.value);
+                            aPlayers[aPlayers.length] = oCursor.value;                            
                             oCursor.continue();
+                        } else {
+                            if (pcPlayer !== null) {
+                                // show single player sheet
+                            }
+                            
+                            poGlobals.goANRTO.cache.views.players.render(aPlayers);
                         }
                     };
-                    
-                    console.log('[PLAYERS]', pcPlayer);*/
-                                        
-                    //poGlobals.goANRTO.cache.views.players.render([]);
                 },
                 newplayer: function () {
                     poGlobals.goANRTO.cache.views.newPlayer.render();
@@ -160,31 +170,6 @@
                     poGlobals.goANRTO.cache.router.navigate(cUrl, {trigger: true});
                 }
             });
-            
-            // IndexedDB
-            // @read: http://stackoverflow.com/questions/9384128/how-to-delete-indexeddb-in-chrome
-            // @read: https://developer.mozilla.org/en/docs/IndexedDB
-            // poGlobals.indexedDB.deleteDatabase('ANRTO')
-            poGlobals.goANRTO._indexedDBSupport();
-            
-            if (poGlobals.indexedDB) {
-                poGlobals.goANRTO.cache.request = poGlobals.indexedDB.open('ANRTO', 1);
-                poGlobals.goANRTO.cache.request.onerror = function (poEvent) {
-                    console.error('[ERROR]', poEvent.target.errorCode);
-                };
-                poGlobals.goANRTO.cache.request.onsuccess = function (poEvent) {
-                    // @todo: why does it make a new cache.request each time the app is routed?
-                    console.log('PASA', goANRTO.cache.request.result);
-                    goANRTO.cache.database = goANRTO.cache.request.result;
-                    console.log('PASA 2', goANRTO.cache.database);
-                };
-                poGlobals.goANRTO.cache.request.onupgradeneeded = function (poEvent) {
-                    var oDB = poEvent.target.result,
-                        oObjectStorePlayers = oDB.createObjectStore('players', {keyPath: 'id', autoIncrement: true}),
-                        oObjectStoreTournaments = oDB.createObjectStore('tournaments', {keyPath: 'id', autoIncrement: true}),
-                        oObjectStoreMatches = oDB.createObjectStore('matches', {keyPath: 'id', autoIncrement: true});
-                };
-            }
         }
     };
 
@@ -235,6 +220,28 @@
      * START document.ready()
      */
     $(document).ready(function () {
+        // IndexedDB
+        // @read: http://stackoverflow.com/questions/9384128/how-to-delete-indexeddb-in-chrome
+        // @read: https://developer.mozilla.org/en/docs/IndexedDB
+        // poGlobals.indexedDB.deleteDatabase('ANRTO')
+        poGlobals.goANRTO._indexedDBSupport();
+        
+        if (poGlobals.indexedDB) {
+            poGlobals.goANRTO.cache.request = poGlobals.indexedDB.open('ANRTO', 1);
+            poGlobals.goANRTO.cache.request.onerror = function (poEvent) {
+                console.error('[ERROR]', poEvent.target.errorCode);
+            };
+            poGlobals.goANRTO.cache.request.onsuccess = function (poEvent) {
+                poGlobals.goANRTO.cache.database = poGlobals.goANRTO.cache.request.result;
+            };
+            poGlobals.goANRTO.cache.request.onupgradeneeded = function (poEvent) {
+                var oDB = poEvent.target.result,
+                    oObjectStorePlayers = oDB.createObjectStore('players', {keyPath: 'id', autoIncrement: true}),
+                    oObjectStoreTournaments = oDB.createObjectStore('tournaments', {keyPath: 'id', autoIncrement: true}),
+                    oObjectStoreMatches = oDB.createObjectStore('matches', {keyPath: 'id', autoIncrement: true});
+            };
+        }
+        
         // APP initialization
         poGlobals.goANRTO.initialize();
     });

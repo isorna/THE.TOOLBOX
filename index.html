@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset='UTF-8'>
         <title>ANR-TO</title>
-        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel='stylesheet' href='/css/cssflow.css' />
         <link rel='stylesheet' href='/css/default.css' />
         <script src='/js/modernizr.custom.92278.js'></script>
         <script>
@@ -12,20 +16,23 @@
     </head>
     
     <body>
-		<script type="text/template" id="homeTemplate">
-			<header><%= cHeaderTitle %></header>
-	        <section>
-				<h1>HOME</h1>
-				<ul>
-					<li><a href="current">Current T.</a></li>
-					<li><a href="new">New T.</a></li>
-					<li><a href="tournaments">View all T.</a></li>
-					<li><a href="players">Players</a></li>
-					<li><a href="new-player">New player</a></li>
-				</ul>
-			</section>
-	        <footer></footer>
-		</script>
+        <script type="text/template" id="homeTemplate">
+            <nav class="menu">
+                <ul class="menu-list">
+                    <li class="menu-sep">Navigation</li>
+                    <li><a href="/" class="menu-link active">Home</a></li>
+                    <li><a href="/players" class="menu-link">Players</a></li>
+                    <li><a href="/new-player" class="menu-link">New Player</a></li>
+                    <!--li><a href="/current">Current T.</a></li-->
+                    <!--li><a href="/new">New T.</a></li-->
+                    <!--li><a href="/tournaments">View all T.</a></li-->
+                </ul>
+                <!--ul class="menu-bottom">
+                    <li><a href="./menu_files/menu.htm" class="menu-bottom-link">Account</a></li>
+                    <li><a href="./menu_files/menu.htm" class="menu-bottom-link">Logout</a></li>
+                </ul-->
+            </nav>
+        </script>
         <script type="text/template" id="newPlayerTemplate">
 			<header><%= cHeaderTitle %></header>
 	        <section>
@@ -34,20 +41,20 @@
                     <label>Name: <input type="text" id="newPlayerName" /></label>
                     <input type="submit" value="save" />
                 </form>
-			</section>
+            </section>
 	        <footer></footer>
-		</script>
+        </script>
         <script type="text/template" id="playersTemplate">
 			<header><%= cHeaderTitle %></header>
 	        <section>
 				<h1><a href="/">HOME</a> / Players</h1>
 				<dl>
-                    <dt>Name</dt>
-                    <dd>Points</dd>
-                    <dd>Runner Wins</dd>
-                    <dd>Runner Agendas</dd>
-                    <dd>Corp Wins</dd>
-                    <dd>Corp Agendas</dd>
+                    <dt class="th">Name</dt>
+                    <dd class="th">Points</dd>
+                    <dd class="th">Runner Wins</dd>
+                    <dd class="th">Runner Agendas</dd>
+                    <dd class="th">Corp Wins</dd>
+                    <dd class="th">Corp Agendas</dd>
                     <% for (var i = 0; i < aPlayers.length; i++) { %>
                     <dt><%=aPlayers[i].name %></dt>
                     <dd><%=aPlayers[i].points %></dd>
@@ -57,9 +64,9 @@
                     <dd><%=aPlayers[i].corpAgendaPoints %></dd>
                     <% } %>
                 </dl>
-			</section>
+            </section>
 	        <footer></footer>
-		</script>
+        </script>
         <script src='/js/jquery-1.8.0.min.js'></script>
         <script src='/js/underscore-1.3.3.min.js'></script>
         <script src='/js/backbone-1.0.0.min.js'></script>
