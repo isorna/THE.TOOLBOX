@@ -11,7 +11,7 @@
     poGlobals.goANRTO = {
         cache: {
             constants: {
-                PAGE_TITLE: '&lt;ANR.TO /&gt;'
+                PAGE_TITLE: '&lt;THE.TOOLBOX /&gt;'
             },
             views: {},
             database: {},
@@ -28,10 +28,32 @@
             }
         },
         initialize: function () {
-            // VIEWS            
+            // VIEWS
+            poGlobals.goANRTO.cache.views.menu = new (Backbone.View.extend({
+                id: 'menuWrapper',
+                tagname: 'nav',
+                className: 'menu',
+                template: $('#menuTemplate').html(),
+                viewRendered: false,
+                initialize: function () {},
+                render: function () {
+                    var hVars = {
+                        cHeaderTitle: poGlobals.goANRTO.cache.constants.PAGE_TITLE
+                    };
+                    
+                    if (!this.viewRendered) {
+                        this.$el.html(_.template(this.template, hVars)).prependTo('body .demo');
+                    } else {
+                        this.$el.show();
+                    }
+                    
+                    return this;
+                }
+            }));
             poGlobals.goANRTO.cache.views.home = new (Backbone.View.extend({
                 id: 'homeWrapper',
-                className: 'pageWrapper',
+                tagname: 'div',
+                className: 'app',
                 template: $('#homeTemplate').html(),
                 viewRendered: false,
                 initialize: function () {},
@@ -40,11 +62,10 @@
                         cHeaderTitle: poGlobals.goANRTO.cache.constants.PAGE_TITLE
                     };
                     
-                    $('.pageWrapper').removeClass('app').hide();
+                    // @todo: ADD 'with-subheader' CLASS
+                    // ...
                     if (!this.viewRendered) {
                         this.$el.html(_.template(this.template, hVars)).appendTo('body .demo');
-                        this.viewRendered = true;
-                        this.$el.addClass('app');
                     } else {
                         this.$el.show();
                     }
@@ -54,7 +75,8 @@
             }));
             poGlobals.goANRTO.cache.views.newPlayer = new (Backbone.View.extend({
                 id: 'newPlayerWrapper',
-                className: 'pageWrapper',
+                tagname: 'div',
+                className: 'app',
                 template: $('#newPlayerTemplate').html(),
                 viewRendered: false,
                 events: {
@@ -66,10 +88,8 @@
                         cHeaderTitle: poGlobals.goANRTO.cache.constants.PAGE_TITLE
                     };
                     
-                    $('.pageWrapper').hide();
                     if (!this.viewRendered) {
                         this.$el.html(_.template(this.template, hVars)).appendTo('body .demo');
-                        this.$el.show();
                     } else {
                         this.$el.show();
                     }
@@ -93,7 +113,8 @@
             }));
             poGlobals.goANRTO.cache.views.players = new (Backbone.View.extend({
                 id: 'playersWrapper',
-                className: 'pageWrapper',
+                tagname: 'div',
+                className: 'app',
                 template: $('#playersTemplate').html(),
                 viewRendered: false,
                 initialize: function () {},
@@ -103,10 +124,8 @@
                         aPlayers: paPlayers
                     };
                     
-                    $('.pageWrapper').hide();
                     if (!this.viewRendered) {
                         this.$el.html(_.template(this.template, hVars)).appendTo('body .demo');
-                        this.$el.show();
                     } else {
                         this.$el.show();
                     }
@@ -132,12 +151,18 @@
                     '*path': '404'
                 },
                 home: function () {
+                    $('a.header-button').attr('href', '/navigation').removeClass('active');
+                    $('#menuWrapper, .app').remove();
                     poGlobals.goANRTO.cache.views.home.render();
                 },
                 navigation: function () {
-                    // ...
+                    $('a.header-button').attr('href', '/').addClass('active');
+                    // navigation doesn't remove '.app' layers
+                    poGlobals.goANRTO.cache.views.menu.render();
                 },
                 players: function (pcPlayer) {
+                    $('a.header-button').attr('href', '/navigation').removeClass('active');
+                    $('#menuWrapper, .app').remove();
                     var oObjectStore = poGlobals.goANRTO.cache.database.transaction('players').objectStore('players'),
                         aPlayers = [];
                     oObjectStore.openCursor().onsuccess = function (poEvent) {
@@ -156,6 +181,8 @@
                     };
                 },
                 newplayer: function () {
+                    $('a.header-button').attr('href', '/navigation').removeClass('active');
+                    $('#menuWrapper, .app').remove();
                     poGlobals.goANRTO.cache.views.newPlayer.render();
                 },
                 404: function (pcPath) {

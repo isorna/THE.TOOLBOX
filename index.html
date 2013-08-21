@@ -16,13 +16,13 @@
     </head>
     
     <body ontouchstart>
-        <div class="demo">
-        <nav class="menu">
+        <div class="demo"></div>
+        <script type="text/template" id="menuTemplate">
             <ul class="menu-list">
                 <li class="menu-sep">Navigation</li>
-                <li><a href="/" class="menu-link active">Home</a></li>
-                <li><a href="/players" class="menu-link">Players</a></li>
-                <li><a href="/new-player" class="menu-link">New Player</a></li>
+                <li><a href="/" class="menu-link active to-home">Home</a></li>
+                <li><a href="/players" class="menu-link to-players">Players</a></li>
+                <li><a href="/new-player" class="menu-link to-new-player">New Player</a></li>
 <!--li><a href="/current">Current T.</a></li-->
 <!--li><a href="/new">New T.</a></li-->
 <!--li><a href="/tournaments">View all T.</a></li-->
@@ -31,27 +31,31 @@
     <li><a href="./menu_files/menu.htm" class="menu-bottom-link">Account</a></li>
     <li><a href="./menu_files/menu.htm" class="menu-bottom-link">Logout</a></li>
 </ul-->
-        </nav>
-        </div>
+        </script>
         <script type="text/template" id="homeTemplate">
-            <!--div class="_app _with-subheader"-->
-                <header class="header">
-                    <h1 class="header-title"><%= cHeaderTitle %></h1>
-                    <a href="/navigation" class="header-button left active icon-list">Menu</a>
-                    <!--a href="/" class="header-button right">Button</a-->
-                </header>
+            <header class="header">
+                <h1 class="header-title"><%= cHeaderTitle %></h1>
+                <a href="/navigation" class="header-button left _active icon-list">Menu</a>
+                <!--a href="/" class="header-button right">Button</a-->
+            </header>
 <!--div class="subheader three">
     <a href="http://s3.cssflow.com/kits/mobile/index.html" class="subheader-button">Article</a>
     <a href="http://s3.cssflow.com/kits/mobile/index.html" class="subheader-button active">Demo</a>
     <a href="http://s3.cssflow.com/kits/mobile/index.html" class="subheader-button">Comments <span class="subheader-counter">8</span></a>
-</div-->
-       
-                <section class="container">
-                    <div class="text">
-                        <h2>Welcome to ANR.TO v.0</h2>
-                        <p>Still under development... <!--a href="http://s3.cssflow.com/kits/mobile/index.html" class="more-link">More</a--></p>
-                    </div>
-
+</div-->       
+            <section class="container">
+                <div class="text">
+                    <h2>Welcome to <%= cHeaderTitle %> v.0</h2>
+                    <p>Still under development... <!--a href="http://s3.cssflow.com/kits/mobile/index.html" class="more-link">More</a--></p>
+                </div>
+                <h2 class="boxed-list-title">Features</h2>
+                <ul class="boxed-list">
+                    <li class="boxed-list-row tappable">Player management</li>
+                    <li class="boxed-list-row tappable">Tournament management</li>
+                    <li class="boxed-list-row tappable">Card DB</li>
+                    <li class="boxed-list-row tappable">Deckbuilder app</li>
+                </ul>
+                    
 <!--div class="text">
     <a href="http://s3.cssflow.com/kits/mobile/index.html" class="button">Install</a>
     <input type="submit" value="Save" class="button blue">
@@ -75,7 +79,7 @@
 <!--div class="text">
     <a href="http://s3.cssflow.com/kits/mobile/index.html" class="button block">More…</a>
 </div-->
-                </section>
+            </section>
                 
 <nav class="footer">
     <!--a href="http://s3.cssflow.com/kits/mobile/index.html" class="footer-link"><span class="icon-home"></span> Home</a>
@@ -86,20 +90,34 @@
             <!--/div-->
         </script>
         <script type="text/template" id="newPlayerTemplate">
-			<header><%= cHeaderTitle %></header>
-	        <section>
-				<h1><a href="/">HOME</a> / New Player</h1>
+            <header class="header">
+                <h1 class="header-title"><%= cHeaderTitle %></h1>
+                <a href="/navigation" class="header-button left _active icon-list">Menu</a>
+                <input type="submit" value="Submit" class="header-button right light" />
+            </header>
+	        <section class="container">
 				<form id="newPlayerForm">
-                    <label>Name: <input type="text" id="newPlayerName" /></label>
-                    <input type="submit" value="save" />
+                    <h2 class="heading">New Player</h2>
+                    <fieldset>
+                        <p>
+                            <label for="newPlayerName" class="text-label">Name</label>
+                            <input type="text" name="newPlayerName" id="newPlayerName" class="text-field" value="John Doe...">
+                        </p>
+                    </fieldset>
                 </form>
             </section>
-	        <footer></footer>
         </script>
         <script type="text/template" id="playersTemplate">
-			<header><%= cHeaderTitle %></header>
-	        <section>
-				<h1><a href="/">HOME</a> / Players</h1>
+            <header class="header">
+                <h1 class="header-title"><%= cHeaderTitle %></h1>
+                <a href="/navigation" class="header-button left _active icon-list">Menu</a>
+                <!--a href="/" class="header-button right">Button</a-->
+            </header>
+	        <section class="container">
+                <div class="text">
+                    <h2>Players</h2>
+                    <p>This is a list of players registered in your device.</p>
+                </div>
 				<dl>
                     <dt class="th">Name</dt>
                     <dd class="th">Points</dd>
@@ -117,7 +135,6 @@
                     <% } %>
                 </dl>
             </section>
-	        <footer></footer>
         </script>
         <script src='/js/jquery-1.8.0.min.js'></script>
         <script src='/js/underscore-1.3.3.min.js'></script>
