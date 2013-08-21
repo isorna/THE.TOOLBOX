@@ -15,23 +15,75 @@
         </script>
     </head>
     
-    <body>
+    <body ontouchstart>
+        <div class="demo">
+        <nav class="menu">
+            <ul class="menu-list">
+                <li class="menu-sep">Navigation</li>
+                <li><a href="/" class="menu-link active">Home</a></li>
+                <li><a href="/players" class="menu-link">Players</a></li>
+                <li><a href="/new-player" class="menu-link">New Player</a></li>
+<!--li><a href="/current">Current T.</a></li-->
+<!--li><a href="/new">New T.</a></li-->
+<!--li><a href="/tournaments">View all T.</a></li-->
+            </ul>
+<!--ul class="menu-bottom">
+    <li><a href="./menu_files/menu.htm" class="menu-bottom-link">Account</a></li>
+    <li><a href="./menu_files/menu.htm" class="menu-bottom-link">Logout</a></li>
+</ul-->
+        </nav>
+        </div>
         <script type="text/template" id="homeTemplate">
-            <nav class="menu">
-                <ul class="menu-list">
-                    <li class="menu-sep">Navigation</li>
-                    <li><a href="/" class="menu-link active">Home</a></li>
-                    <li><a href="/players" class="menu-link">Players</a></li>
-                    <li><a href="/new-player" class="menu-link">New Player</a></li>
-                    <!--li><a href="/current">Current T.</a></li-->
-                    <!--li><a href="/new">New T.</a></li-->
-                    <!--li><a href="/tournaments">View all T.</a></li-->
-                </ul>
-                <!--ul class="menu-bottom">
-                    <li><a href="./menu_files/menu.htm" class="menu-bottom-link">Account</a></li>
-                    <li><a href="./menu_files/menu.htm" class="menu-bottom-link">Logout</a></li>
-                </ul-->
-            </nav>
+            <!--div class="_app _with-subheader"-->
+                <header class="header">
+                    <h1 class="header-title"><%= cHeaderTitle %></h1>
+                    <a href="/navigation" class="header-button left active icon-list">Menu</a>
+                    <!--a href="/" class="header-button right">Button</a-->
+                </header>
+<!--div class="subheader three">
+    <a href="http://s3.cssflow.com/kits/mobile/index.html" class="subheader-button">Article</a>
+    <a href="http://s3.cssflow.com/kits/mobile/index.html" class="subheader-button active">Demo</a>
+    <a href="http://s3.cssflow.com/kits/mobile/index.html" class="subheader-button">Comments <span class="subheader-counter">8</span></a>
+</div-->
+       
+                <section class="container">
+                    <div class="text">
+                        <h2>Welcome to ANR.TO v.0</h2>
+                        <p>Still under development... <!--a href="http://s3.cssflow.com/kits/mobile/index.html" class="more-link">More</a--></p>
+                    </div>
+
+<!--div class="text">
+    <a href="http://s3.cssflow.com/kits/mobile/index.html" class="button">Install</a>
+    <input type="submit" value="Save" class="button blue">
+    <button class="button green">Buy</button>
+    <a href="http://s3.cssflow.com/kits/mobile/index.html" class="button red">Delete</a>
+</div-->
+
+<!--ul class="pills">
+    <li class="pill"><a href="http://s3.cssflow.com/kits/mobile/index.html">Details</a></li>
+    <li class="pill active"><a href="http://s3.cssflow.com/kits/mobile/index.html">Reviews</a></li>
+    <li class="pill"><a href="http://s3.cssflow.com/kits/mobile/index.html">Related</a></li>
+</ul-->
+
+<!--div class="pills-content">
+    <a href="http://s3.cssflow.com/kits/mobile/index.html" class="tag">iOS</a>
+    <a href="http://s3.cssflow.com/kits/mobile/index.html" class="tag">Mobile</a>
+    <a href="http://s3.cssflow.com/kits/mobile/index.html" class="tag">UI Kit</a>
+    <a href="http://s3.cssflow.com/kits/mobile/index.html" class="tag">CSS</a>
+</div-->
+
+<!--div class="text">
+    <a href="http://s3.cssflow.com/kits/mobile/index.html" class="button block">More…</a>
+</div-->
+                </section>
+                
+<nav class="footer">
+    <!--a href="http://s3.cssflow.com/kits/mobile/index.html" class="footer-link"><span class="icon-home"></span> Home</a>
+    <a href="./menu_files/menu.htm" class="footer-link active"><span class="icon-more"></span> Menu</a>
+    <a href="http://s3.cssflow.com/kits/mobile/form-1.html" class="footer-link"><span class="icon-square"></span> Forms</a>
+    <a href="http://s3.cssflow.com/kits/mobile/list-1.html" class="footer-link"><span class="icon-circle"></span> Lists</a-->
+</nav>
+            <!--/div-->
         </script>
         <script type="text/template" id="newPlayerTemplate">
 			<header><%= cHeaderTitle %></header>

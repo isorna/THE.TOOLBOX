@@ -40,10 +40,11 @@
                         cHeaderTitle: poGlobals.goANRTO.cache.constants.PAGE_TITLE
                     };
                     
-                    $('.pageWrapper').hide();
+                    $('.pageWrapper').removeClass('app').hide();
                     if (!this.viewRendered) {
-                        this.$el.html(_.template(this.template, hVars)).appendTo('body');
+                        this.$el.html(_.template(this.template, hVars)).appendTo('body .demo');
                         this.viewRendered = true;
+                        this.$el.addClass('app');
                     } else {
                         this.$el.show();
                     }
@@ -67,7 +68,7 @@
                     
                     $('.pageWrapper').hide();
                     if (!this.viewRendered) {
-                        this.$el.html(_.template(this.template, hVars)).appendTo('body');
+                        this.$el.html(_.template(this.template, hVars)).appendTo('body .demo');
                         this.$el.show();
                     } else {
                         this.$el.show();
@@ -104,7 +105,7 @@
                     
                     $('.pageWrapper').hide();
                     if (!this.viewRendered) {
-                        this.$el.html(_.template(this.template, hVars)).appendTo('body');
+                        this.$el.html(_.template(this.template, hVars)).appendTo('body .demo');
                         this.$el.show();
                     } else {
                         this.$el.show();
@@ -122,6 +123,8 @@
                     '/': 'home',
                     'index.html': 'home',
                     '/index.html': 'home',
+                    'navigation': 'navigation',
+                    '/navigation': 'navigation',
                     'players(/:player)': 'players',
                     '/players(/:player)': 'players',
                     'new-player': 'newplayer',
@@ -130,6 +133,9 @@
                 },
                 home: function () {
                     poGlobals.goANRTO.cache.views.home.render();
+                },
+                navigation: function () {
+                    // ...
                 },
                 players: function (pcPlayer) {
                     var oObjectStore = poGlobals.goANRTO.cache.database.transaction('players').objectStore('players'),
@@ -212,7 +218,7 @@
         if (!poGlobals.indexedDB) {
             console.error('[ERROR] No IndexedDB support');
         } else {
-            console.info('[OK] IndexedDB support detected');
+            // console.info('[OK] IndexedDB support detected');
         }
     };
     
