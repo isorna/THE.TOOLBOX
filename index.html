@@ -20,9 +20,9 @@
         <script type="text/template" id="menuTemplate">
             <ul class="menu-list">
                 <li class="menu-sep">Navigation</li>
-                <li><a href="/" class="menu-link active to-home">Home</a></li>
-                <li><a href="/players" class="menu-link to-players">Players</a></li>
-                <li><a href="/new-player" class="menu-link to-new-player">New Player</a></li>
+                <li><a href="/" class="menu-link to-homeWrapper">Home</a></li>
+                <li><a href="/players" class="menu-link to-playersWrapper">Players</a></li>
+                <li><a href="/new-player" class="menu-link to-newPlayerWrapper">New Player</a></li>
 <!--li><a href="/current">Current T.</a></li-->
 <!--li><a href="/new">New T.</a></li-->
 <!--li><a href="/tournaments">View all T.</a></li-->
@@ -51,9 +51,9 @@
                 <h2 class="boxed-list-title">Features</h2>
                 <ul class="boxed-list">
                     <li class="boxed-list-row tappable">Player management</li>
-                    <li class="boxed-list-row tappable">Tournament management</li>
-                    <li class="boxed-list-row tappable">Card DB</li>
-                    <li class="boxed-list-row tappable">Deckbuilder app</li>
+                    <li class="boxed-list-row tappable stroke">Tournament management</li>
+                    <li class="boxed-list-row tappable stroke">Card DB</li>
+                    <li class="boxed-list-row tappable stroke">Deckbuilder app</li>
                 </ul>
                     
 <!--div class="text">
@@ -81,12 +81,12 @@
 </div-->
             </section>
                 
-<nav class="footer">
-    <!--a href="http://s3.cssflow.com/kits/mobile/index.html" class="footer-link"><span class="icon-home"></span> Home</a>
-    <a href="./menu_files/menu.htm" class="footer-link active"><span class="icon-more"></span> Menu</a>
-    <a href="http://s3.cssflow.com/kits/mobile/form-1.html" class="footer-link"><span class="icon-square"></span> Forms</a>
-    <a href="http://s3.cssflow.com/kits/mobile/list-1.html" class="footer-link"><span class="icon-circle"></span> Lists</a-->
-</nav>
+            <nav class="footer">
+                <a href="/" class="footer-link active"><span class="icon-home"></span> Home</a>
+                <a href="/navigation" class="footer-link"><span class="icon-more"></span> Menu</a>
+                <a href="/players" class="footer-link"><span class="icon-square"></span> Players</a>
+                <a href="/new-player" class="footer-link"><span class="icon-circle"></span> New Player</a>
+            </nav>
             <!--/div-->
         </script>
         <script type="text/template" id="newPlayerTemplate">
@@ -106,6 +106,12 @@
                     </fieldset>
                 </form>
             </section>
+            <nav class="footer">
+                <a href="/" class="footer-link"><span class="icon-home"></span> Home</a>
+                <a href="/navigation" class="footer-link"><span class="icon-more"></span> Menu</a>
+                <a href="/players" class="footer-link"><span class="icon-square"></span> Players</a>
+                <a href="/new-player" class="footer-link active"><span class="icon-circle"></span> New Player</a>
+            </nav>
         </script>
         <script type="text/template" id="playersTemplate">
             <header class="header">
@@ -118,23 +124,39 @@
                     <h2>Players</h2>
                     <p>This is a list of players registered in your device.</p>
                 </div>
-				<dl>
-                    <dt class="th">Name</dt>
-                    <dd class="th">Points</dd>
-                    <dd class="th">Runner Wins</dd>
-                    <dd class="th">Runner Agendas</dd>
-                    <dd class="th">Corp Wins</dd>
-                    <dd class="th">Corp Agendas</dd>
-                    <% for (var i = 0; i < aPlayers.length; i++) { %>
-                    <dt><%=aPlayers[i].name %></dt>
-                    <dd><%=aPlayers[i].points %></dd>
-                    <dd><%=aPlayers[i].runnerWins %></dd>
-                    <dd><%=aPlayers[i].runnerAgendaPoints %></dd>
-                    <dd><%=aPlayers[i].corpWins %></dd>
-                    <dd><%=aPlayers[i].corpAgendaPoints %></dd>
-                    <% } %>
-                </dl>
+                <div class="text">
+                    <table class="table">
+                        <thead class="table-head">
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>R.</th>
+                                <th>A.</th>
+                                <th>C.</th>
+                                <th>A.</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-body">
+                            <% for (var i = 0; i < aPlayers.length; i++) { %>
+                            <tr>
+                                <td><%=aPlayers[i].points %></td>
+                                <td><%=aPlayers[i].name %></td>
+                                <td><%=aPlayers[i].runnerWins %></td>
+                                <td><%=aPlayers[i].runnerAgendaPoints %></td>
+                                <td><%=aPlayers[i].corpWins %></td>
+                                <td><%=aPlayers[i].corpAgendaPoints %></td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                </table>
+                </div>
             </section>
+            <nav class="footer">
+                <a href="/" class="footer-link"><span class="icon-home"></span> Home</a>
+                <a href="/navigation" class="footer-link"><span class="icon-more"></span> Menu</a>
+                <a href="/players" class="footer-link active"><span class="icon-square"></span> Players</a>
+                <a href="/new-player" class="footer-link"><span class="icon-circle"></span> New Player</a>
+            </nav>
         </script>
         <script src='/js/jquery-1.8.0.min.js'></script>
         <script src='/js/underscore-1.3.3.min.js'></script>

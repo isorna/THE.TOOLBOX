@@ -11,7 +11,7 @@
     poGlobals.goANRTO = {
         cache: {
             constants: {
-                PAGE_TITLE: '&lt;THE.TOOLBOX /&gt;'
+                PAGE_TITLE: 'THE.TOOLBOX'
             },
             views: {},
             database: {},
@@ -159,6 +159,7 @@
                     $('a.header-button').attr('href', '/').addClass('active');
                     // navigation doesn't remove '.app' layers
                     poGlobals.goANRTO.cache.views.menu.render();
+                    $('.to-' + $('.app').attr('id')).addClass('active');
                 },
                 players: function (pcPlayer) {
                     $('a.header-button').attr('href', '/navigation').removeClass('active');
