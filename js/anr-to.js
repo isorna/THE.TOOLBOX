@@ -80,6 +80,7 @@
                 template: $('#newPlayerTemplate').html(),
                 viewRendered: false,
                 events: {
+                    'click #submitNewPlayerForm': 'saveNewPlayer',
                     'submit #newPlayerForm': 'saveNewPlayer'
                 },
                 initialize: function () {},
@@ -103,8 +104,8 @@
                         oRequest = oObjectStore.put(hNewPLayer);
                     
                     oRequest.onsuccess = function (poEvent) {
-                        console.log('[OK]', hNewPLayer.name + ' saved!');
-                        // @todo: show player sheet after saving it
+                        //console.log('[OK]', hNewPLayer.name + ' saved!');
+                        // @todo: show player sheet after saving it?
                         poGlobals.goANRTO.cache.router.navigate('players', {trigger: true});
                     };
                     
@@ -169,15 +170,15 @@
                     oObjectStore.openCursor().onsuccess = function (poEvent) {
                         var oCursor = poEvent.target.result;
                         
-                        if (oCursor) {
-                            aPlayers[aPlayers.length] = oCursor.value;                            
-                            oCursor.continue();
+                        if (pcPlayer !== null) {
+                            // show single player sheet
                         } else {
-                            if (pcPlayer !== null) {
-                                // show single player sheet
+                            if (oCursor) {
+                                aPlayers[aPlayers.length] = oCursor.value;                            
+                                oCursor.continue();
+                            } else {
+                                poGlobals.goANRTO.cache.views.players.render(aPlayers);
                             }
-                            
-                            poGlobals.goANRTO.cache.views.players.render(aPlayers);
                         }
                     };
                 },

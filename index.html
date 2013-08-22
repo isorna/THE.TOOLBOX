@@ -93,7 +93,7 @@
             <header class="header">
                 <h1 class="header-title"><%= cHeaderTitle %></h1>
                 <a href="/navigation" class="header-button left _active icon-list">Menu</a>
-                <input type="submit" value="Submit" class="header-button right light" />
+                <input id="submitNewPlayerForm" type="button" value="Submit" class="header-button right light" />
             </header>
 	        <section class="container">
 				<form id="newPlayerForm">
@@ -101,7 +101,7 @@
                     <fieldset>
                         <p>
                             <label for="newPlayerName" class="text-label">Name</label>
-                            <input type="text" name="newPlayerName" id="newPlayerName" class="text-field" value="John Doe...">
+                            <input type="text" name="newPlayerName" id="newPlayerName" class="text-field" value="" placeholder="John Doe...">
                         </p>
                     </fieldset>
                 </form>
