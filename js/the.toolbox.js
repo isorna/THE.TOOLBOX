@@ -254,7 +254,7 @@
     poGlobals.goANRTO._indexedDBSupport = function () {
         //var _indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
         //poGlobals.indexedDB = _indexedDB;
-        if (window.indexedDB) {
+        if (!window.indexedDB) {
             poGlobals.indexedDB = window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
         }
         poGlobals.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
