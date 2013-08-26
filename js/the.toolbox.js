@@ -252,7 +252,11 @@
      * @read: http://www.sitepoint.com/creating-a-notepad-app-with-indexeddb/
      */
     poGlobals.goANRTO._indexedDBSupport = function () {
-        poGlobals.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+        //var _indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+        //poGlobals.indexedDB = _indexedDB;
+        if (window.indexedDB) {
+            poGlobals.indexedDB = window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+        }
         poGlobals.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
         poGlobals.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
         
