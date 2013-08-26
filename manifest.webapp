@@ -1,0 +1,24 @@
+{
+    "version": "1",
+    "name": "THE TOOLBOX web app",
+    "launch_path": "index.html",
+    "description": "Android Netrunner LCG web app for tournament handling and deck construction",
+    "icons": {
+        "16": "img/logo16.png",
+        "32": "img/logo32.png",
+        "48": "img/logo48.png",
+        "64": "img/logo64.png",
+        "128": "img/logo128.png"
+    },
+    "developer": {
+        "name": "Alvaro Isorna",
+        "url": "http://isorna.net"
+    },
+    "installs_allowed_from": ["*"],
+    "default_locale": "en",
+    "permissions": {
+        "desktop-notification": {
+            "description" : "To show notifications"
+        }
+    }
+}

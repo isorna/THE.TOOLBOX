@@ -6,6 +6,18 @@
     'use strict';
     
     /*
+     * APP CACHE REFRESH
+     * Ask the user to reload app when a new version is available.
+     */
+    if (poGlobals.applicationCache) {
+        poGlobals.applicationCache.addEventListener('updateready', function () {
+            if (poGlobals.confirm('An update is available. Reload now?')) {
+                poGlobals.location.reload();
+            }
+        });
+    }
+    
+    /*
      * APP object declaration
      */
     poGlobals.goANRTO = {
@@ -174,7 +186,7 @@
                             // show single player sheet
                         } else {
                             if (oCursor) {
-                                aPlayers[aPlayers.length] = oCursor.value;                            
+                                aPlayers[aPlayers.length] = oCursor.value;
                                 oCursor.continue();
                             } else {
                                 poGlobals.goANRTO.cache.views.players.render(aPlayers);
