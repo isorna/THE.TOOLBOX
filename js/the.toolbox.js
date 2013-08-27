@@ -150,17 +150,11 @@
             // ROUTER            
             poGlobals.goANRTO.cache.router = new (Backbone.Router.extend({
                 routes: {
-                    'C:/xampp/htdocs/ANR-TO/index.html': 'home', // LOCAL ENV PATCH
                     '': 'home',
-                    '/': 'home',
                     'index.html': 'home',
-                    '/index.html': 'home',
                     'navigation': 'navigation',
-                    '/navigation': 'navigation',
-                    'players(/:player)': 'players',
-                    '/players(/:player)': 'players',
+                    'players(/:players)': 'players',
                     'new-player': 'newplayer',
-                    '/new-player': 'newplayer',
                     '*path': '404'
                 },
                 home: function () {
@@ -174,7 +168,7 @@
                     poGlobals.goANRTO.cache.views.menu.render();
                     $('.to-' + $('.app').attr('id')).addClass('active');
                 },
-                players: function (pcPlayer) {
+                players: function (pcPlayer) {//console.log('OK');
                     $('a.header-button').attr('href', '/navigation').removeClass('active');
                     $('#menuWrapper, .app').remove();
                     var oObjectStore = poGlobals.goANRTO.cache.database.transaction('players').objectStore('players'),
