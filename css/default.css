@@ -88,6 +88,9 @@
     text-decoration: line-through;
 }
 
+/* web app styles */
+.hidden-menu {display: none;}
+
 /* Graphite table */
 .table {
     width:100%;

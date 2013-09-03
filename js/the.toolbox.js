@@ -56,7 +56,8 @@
                     if (!this.viewRendered) {
                         this.$el.html(_.template(this.template, hVars)).prependTo('body .demo');
                     } else {
-                        this.$el.show();
+                        //this.viewRendered = true;
+                        //this.$el.show();
                     }
                     
                     return this;
@@ -159,18 +160,23 @@
                 },
                 home: function () {
                     $('a.header-button').attr('href', '/navigation').removeClass('active');
-                    $('#menuWrapper, .app').remove();
+                    //$('#menuWrapper, .app').remove();
+                    $('#menuWrapper').removeClass('menu').addClass('hidden-menu');
+                    $('.app').remove();
                     poGlobals.goANRTO.cache.views.home.render();
                 },
                 navigation: function () {
                     $('a.header-button').attr('href', '/').addClass('active');
                     // navigation doesn't remove '.app' layers
                     poGlobals.goANRTO.cache.views.menu.render();
+                    $('#menuWrapper').removeClass('hidden-menu').addClass('menu');
                     $('.to-' + $('.app').attr('id')).addClass('active');
                 },
                 players: function (pcPlayer) {//console.log('OK');
                     $('a.header-button').attr('href', '/navigation').removeClass('active');
-                    $('#menuWrapper, .app').remove();
+                    //$('#menuWrapper, .app').remove();
+                    $('#menuWrapper').removeClass('menu').addClass('hidden-menu');
+                    $('.app').remove();
                     var oObjectStore = poGlobals.goANRTO.cache.database.transaction('players').objectStore('players'),
                         aPlayers = [];
                     oObjectStore.openCursor().onsuccess = function (poEvent) {
@@ -190,7 +196,9 @@
                 },
                 newplayer: function () {
                     $('a.header-button').attr('href', '/navigation').removeClass('active');
-                    $('#menuWrapper, .app').remove();
+                    //$('#menuWrapper, .app').remove();
+                    $('#menuWrapper').removeClass('menu').addClass('hidden-menu');
+                    $('.app').remove();
                     poGlobals.goANRTO.cache.views.newPlayer.render();
                 },
                 404: function (pcPath) {
